@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      =  env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  role      String   @default("user") // Roles: "user" or "admin"
+  polls     Poll[] // A user can create many polls
+  votes     Vote[] // A user can cast many votes
+  createdAt DateTime @default(now())
+  Event     Event[]
+}
+
+model Poll {
+  id        Int      @id @default(autoincrement())
+  question  String
+  options   Json // Array of objects: [{ text: String, votes: Int }]
+  createdBy Int // Foreign key to the user who created the poll
+  user      User     @relation(fields: [createdBy], references: [id]) // Reference to the user who created the poll
+  expiresAt DateTime
+  votes     Vote[] // A poll can have many votes
+  createdAt DateTime @default(now())
+  Event     Event[]
+}
+
+model Vote {
+  id      Int      @id @default(autoincrement())
+  pollId  Int // Foreign key to the poll
+  poll    Poll     @relation(fields: [pollId], references: [id]) // Reference to the poll
+  userId  Int // Foreign key to the user who voted
+  user    User     @relation(fields: [userId], references: [id]) // Reference to the user who voted
+  option  String // The option the user voted for
+  votedAt DateTime @default(now())
+}
+
+model Event {
+  id        Int      @id @default(autoincrement())
+  type      String // Event type: "vote" or "pollExpired"
+  pollId    Int // Foreign key to the poll
+  poll      Poll     @relation(fields: [pollId], references: [id]) // Reference to the poll
+  userId    Int? // Foreign key to the user (optional)
+  user      User?    @relation(fields: [userId], references: [id]) // Reference to the user (optional)
+  createdAt DateTime @default(now())
+}
