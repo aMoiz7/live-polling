@@ -7,6 +7,5 @@ const router = express.Router()
 
 router.route('/signup').post(signUp)
 router.route("/login").get(login);
-
 router.route("/poll").post(polls);
 export default router
