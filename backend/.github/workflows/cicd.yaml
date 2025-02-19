@@ -50,5 +50,9 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
+          file: ./docker/dockerfile
           push: true
           tags: moizh750/polling-app-backend:latest
+
+      - name: verify pushed Image
+        run:  docker pull moizh750/polling-app-backend:latest  
