@@ -51,4 +51,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: moizy/polling-app-backend:latest
+          tags: moizh750/polling-app-backend:latest
