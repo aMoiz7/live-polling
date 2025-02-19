@@ -13,6 +13,9 @@ RUN npm install --only=production
 # Copy the entire application code
 COPY . .
 
+# Set environment variables
+ENV DATABASE_URL="postgresql://neondb_owner:npg_iVJYQjDf1Bc2@ep-little-base-a8o3m5rl-pooler.eastus2.azure.neon.tech/neondb?sslmode=require"
+
 # Generate Prisma Client
 RUN npx prisma generate
 
