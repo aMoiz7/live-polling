@@ -47,10 +47,10 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./Dockerfile
+          context: ./backend  # Update if Dockerfile is inside a folder
+          file: ./backend/Dockerfile 
           push: true
           tags: moizh750/polling-app-backend:latest
 
